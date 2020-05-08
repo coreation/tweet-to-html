@@ -71,8 +71,16 @@ function processUrls(urls, tweetObj) {
   urls.forEach((urlObj, index) => {
     var quotedTweetHtml = '';
     var indices = urlObj.indices;
-    var urlToReplace = text.substring(indices[0],indices[1]);
-    //var urlToReplace = tweetObj.text.substring(indices[0],indices[1]);
+    
+    if (tweetObj.full_text) {
+      var urlToReplace = tweetObj.full_text.substring(indices[0],indices[1]);
+    } else if (tweetObj.text) {
+      var urlToReplace = tweetObj.text.substring(indices[0],indices[1]);
+    }
+
+    if (! urlToReplace) {
+      return;
+    }
 
     if(index === urls.length-1 && tweetObj.quoted_status) {
       quotedTweetHtml = parseTweets(tweetObj.quoted_status).html;
